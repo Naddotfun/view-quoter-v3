@@ -12,11 +12,11 @@ import "v3-periphery/contracts/libraries/Path.sol";
 import {SqrtPriceMath} from "v3-core/contracts/libraries/SqrtPriceMath.sol";
 import {LiquidityMath} from "v3-core/contracts/libraries/LiquidityMath.sol";
 import {PoolTickBitmap} from "./libraries/PoolTickBitmap.sol";
-import {IQuoter} from "./interfaces/IQuoter.sol";
-import {PoolAddress} from "./libraries/PoolAddress.sol";
+import {IQuoterV3} from "./interfaces/IQuoterV3.sol";
+import {ICapricornCLFactory} from "./interfaces/ICapricornCLFactory.sol";
 import {QuoterMath} from "./libraries/QuoterMath.sol";
 
-contract Quoter is IQuoter {
+contract QuoterV3 is IQuoterV3 {
     using QuoterMath for *;
     using LowGasSafeMath for uint256;
     using LowGasSafeMath for int256;
@@ -32,10 +32,10 @@ contract Quoter is IQuoter {
     }
 
     function getPool(address tokenA, address tokenB, uint24 fee) private view returns (address pool) {
-        pool = PoolAddress.computeAddress(factory, PoolAddress.getPoolKey(tokenA, tokenB, fee));
+        pool = ICapricornCLFactory(factory).getPool(tokenA, tokenB, fee);
     }
 
-    /// @inheritdoc IQuoter
+    /// @inheritdoc IQuoterV3
     function quoteExactInputSingleWithPool(QuoteExactInputSingleWithPoolParams memory params)
         public
         view
@@ -64,7 +64,7 @@ contract Quoter is IQuoter {
         amountReceived = amount0 > 0 ? uint256(-amount1) : uint256(-amount0);
     }
 
-    /// @inheritdoc IQuoter
+    /// @inheritdoc IQuoterV3
     function quoteExactInputSingle(QuoteExactInputSingleParams memory params)
         public
         view
@@ -85,7 +85,7 @@ contract Quoter is IQuoter {
         (amountReceived, sqrtPriceX96After, initializedTicksCrossed,) = quoteExactInputSingleWithPool(poolParams);
     }
 
-    /// @inheritdoc IQuoter
+    /// @inheritdoc IQuoterV3
     function quoteExactInput(bytes memory path, uint256 amountIn)
         public
         view
@@ -129,7 +129,7 @@ contract Quoter is IQuoter {
         }
     }
 
-    /// @inheritdoc IQuoter
+    /// @inheritdoc IQuoterV3
     function quoteExactOutputSingleWithPool(QuoteExactOutputSingleWithPoolParams memory params)
         public
         view
@@ -166,7 +166,7 @@ contract Quoter is IQuoter {
         if (amountOutCached != 0) require(amountReceived == amountOutCached);
     }
 
-    /// @inheritdoc IQuoter
+    /// @inheritdoc IQuoterV3
     function quoteExactOutputSingle(QuoteExactOutputSingleParams memory params)
         public
         view
@@ -187,7 +187,7 @@ contract Quoter is IQuoter {
         (amountIn, sqrtPriceX96After, initializedTicksCrossed,) = quoteExactOutputSingleWithPool(poolParams);
     }
 
-    /// @inheritdoc IQuoter
+    /// @inheritdoc IQuoterV3
     function quoteExactOutput(bytes memory path, uint256 amountOut)
         public
         view

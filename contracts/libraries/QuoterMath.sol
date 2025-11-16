@@ -3,7 +3,7 @@ pragma solidity ^0.7.6;
 pragma abicoder v2;
 
 import {IUniswapV3Pool} from "v3-core/contracts/interfaces/IUniswapV3Pool.sol";
-import {IQuoter} from "../interfaces/IQuoter.sol";
+import {IQuoterV3} from "../interfaces/IQuoterV3.sol";
 import {SwapMath} from "v3-core/contracts/libraries/SwapMath.sol";
 import {FullMath} from "v3-core/contracts/libraries/FullMath.sol";
 import {TickMath} from "v3-core/contracts/libraries/TickMath.sol";

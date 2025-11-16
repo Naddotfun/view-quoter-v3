@@ -3,13 +3,13 @@ pragma solidity ^0.7.6;
 pragma abicoder v2;
 
 import {Test, console2, console} from "forge-std/Test.sol";
-import {Quoter} from "../contracts/Quoter.sol";
-import {IQuoter} from "../contracts/interfaces/IQuoter.sol";
+import {QuoterV3} from "../contracts/QuoterV3.sol";
+import {IQuoterV3} from "../contracts/interfaces/IQuoterV3.sol";
 import {IQuoterV2} from "v3-periphery/contracts/interfaces/IQuoterV2.sol";
 
 contract QuoterTest is Test {
     uint256 mainnetFork;
-    Quoter quoterV3;
+    QuoterV3 quoterV3;
     IQuoterV2 quoterV2;
 
     address usdc = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
@@ -21,7 +21,7 @@ contract QuoterTest is Test {
     function setUp() public {
         mainnetFork = vm.createSelectFork(vm.envString("MAINNET_RPC_URL"));
 
-        quoterV3 = new Quoter(0x1F98431c8aD98523631AE4a59f267346ea31F984);
+        quoterV3 = new QuoterV3(0x1F98431c8aD98523631AE4a59f267346ea31F984);
 
         // existing quoter
         quoterV2 = IQuoterV2(0x61fFE014bA17989E743c5F6cB21bF9697530B21e);
@@ -49,7 +49,7 @@ contract QuoterTest is Test {
             sqrtPriceLimitX96: 0
         });
 
-        IQuoter.QuoteExactInputSingleParams memory paramsV3 = IQuoter.QuoteExactInputSingleParams({
+        IQuoterV3.QuoteExactInputSingleParams memory paramsV3 = IQuoterV3.QuoteExactInputSingleParams({
             tokenIn: usdc,
             tokenOut: eth,
             amountIn: amount,
@@ -106,7 +106,7 @@ contract QuoterTest is Test {
             sqrtPriceLimitX96: 0
         });
 
-        IQuoter.QuoteExactOutputSingleParams memory paramsV3 = IQuoter.QuoteExactOutputSingleParams({
+        IQuoterV3.QuoteExactOutputSingleParams memory paramsV3 = IQuoterV3.QuoteExactOutputSingleParams({
             tokenIn: usdc,
             tokenOut: eth,
             amount: amount,
@@ -153,7 +153,7 @@ contract QuoterTest is Test {
             sqrtPriceLimitX96: 0
         });
 
-        IQuoter.QuoteExactOutputSingleParams memory paramsV3 = IQuoter.QuoteExactOutputSingleParams({
+        IQuoterV3.QuoteExactOutputSingleParams memory paramsV3 = IQuoterV3.QuoteExactOutputSingleParams({
             tokenIn: dai,
             tokenOut: wbtc,
             amount: amount,
